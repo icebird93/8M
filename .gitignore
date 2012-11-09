@@ -1,2 +1,4 @@
 [Dd]ebug/
-*.vcxproj*
+*vcxproj*
+.gitignore
+Thumbs.db
