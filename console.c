@@ -1,28 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 #include <Windows.h>
 
 #include "console.h"
-
-enum
-{
-    BLACK = 0,
-    DARK_BLUE = 1,
-    DARK_GREEN = 2,
-    TEAL = 3,
-    DARK_RED = 4,
-    DARK_PURPLE = 5,
-    GOLD = 6,
-    GREY = 7,
-    DARK_WHITE = 8,
-    BLUE = 9,
-    GREEN = 10,
-    CYAN = 11,
-    RED = 12,
-    PURPLE = 13,
-    YELLOW = 14,
-    WHITE = 15
-};
 
 void clear_screen()
 {
@@ -61,4 +42,47 @@ void go_to(const int x, const int y)
     position.Y = y;
 
     SetConsoleCursorPosition(hConsole, position);
+}
+
+/**
+ * read_key
+ * @Return: char
+ * @Params: keine
+ *
+ * Liest eine Taste ein und wenn es ein Funktiontaste ist dann gebt zurück die virtuelle KEYCODE Konstante (wenn es existiert, sonst KEY_NULL), sonst die ASCII Code 
+ */
+int read_key()
+{
+	int ch=getch();
+
+	// Die gedrückte Taste ist ein ASCII Charakter, Return oder Funktionstaste
+	switch(ch)
+	{
+		default:
+			return ch;
+		case 13:
+			return KEY_RETURN;
+		case 0:
+			break;
+	}
+
+	// Mit einem Trick machen wir Virtual Keycodes definiert in console.h
+	ch=getch();
+	switch(ch)
+	{
+		case 13:
+			return KEY_RETURN;
+		case 27:
+			return KEY_ESC;
+		case 75:
+			return KEY_LEFT;
+		case 77:
+			return KEY_RIGHT;
+		case 72:
+			return KEY_UP;
+		case 80:
+			return KEY_UP;
+	}
+
+	return KEY_NULL;
 }
