@@ -35,7 +35,7 @@ void set_color(const int background, const int foreground)
     SetConsoleTextAttribute(hConsole, color);
 }
 
-void set_size(const int width, const int height)
+void set_size_and_position(const int width, const int height, const int x, const int y)
 {
 	HWND hWnd = GetConsoleWindow();
 	COORD size;
@@ -48,12 +48,17 @@ void set_size(const int width, const int height)
 	printf("%s", s);
 	system(s);
 
-	MoveWindow(hWnd, 10, 10, width*CHAR_WIDTH, height*CHAR_HEIGHT, 1);
+	MoveWindow(hWnd, x, y, width*CHAR_WIDTH, height*CHAR_HEIGHT, 1);
 
 	size.X = width-5;
 	size.Y = height-5;
 	
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), size);
+}
+
+void set_size(const int width, const int height)
+{
+	set_size_and_position(width, height, 20, 20);
 }
 
 void go_to(const int x, const int y)

@@ -6,12 +6,18 @@
 
 #include "game_21.h"
 
+/**
+ * Console Breite und Höhe
+ */
+#define HEIGHT 60
+#define WIDTH 120
+
 int main(int argc, char *argv[])
 {
 	int selected, ch, points=0;
 
 	// STDOUT aufstellen
-	set_size(120, 60);
+	set_size(WIDTH, HEIGHT);
 	clear_screen();
 	redraw_header();
 

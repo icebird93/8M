@@ -55,5 +55,6 @@ void clear_screen();
 void redraw_header();
 void set_color(const int background, const int foreground);
 void set_size(const int width, const int height);
+void set_size_and_position(const int width, const int height, const int x, const int y);
 void go_to(const int x, const int y);
 int read_key();
