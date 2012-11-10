@@ -29,15 +29,18 @@ int menu()
 	printf("\n\n [H] Hall of Fame");
 
 	set_color(BLACK, RED);
-	printf("\n\n [9] Beenden");
+	printf("\n\n [Q] Beenden");
 
 	set_color(BLACK, WHITE);
 	printf("\n\n # Gewaehlte Funktion: ");
 
 	do
 	{
-		selected=getch();
-	} while((selected<'1' || selected>'9') && tolower(selected)!='h');
+		selected=tolower(getch());
+	} while((selected<'1' || selected>'9') && selected!='h' && selected!='q');
 
-	return selected-'0';
+	if(selected>='1' && selected<='9')
+		return selected-'0';
+	else
+		return selected;
 }

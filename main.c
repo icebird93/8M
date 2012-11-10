@@ -28,13 +28,15 @@ int main(int argc, char *argv[])
 
 			// 1: 21
 			case 1:
+				printf("\n # Die Regel:\n");
+				printf("\n # Sie spielt gegen einem Bot. \n");
 				clear_screen();
 				play_21(&points);
 				redraw_header();
 				break;
 
-			// 9: Beenden
-			case 9:
+			// Q: Beenden
+			case 'q':
 				printf("\n # Sind Sie sicher ([j]/n): ");
 				ch=read_key();
 				if(ch!='j' && ch!=KEY_RETURN)
@@ -45,7 +47,7 @@ int main(int argc, char *argv[])
 				break;
 		}
 
-	} while(selected!=9);
+	} while(selected!='q');
 
 	return 0;
 }

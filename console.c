@@ -62,7 +62,10 @@ int read_key()
 			return ch;
 		case 13:
 			return KEY_RETURN;
+		case 27:
+			return KEY_ESC;
 		case 0:
+		case 224:
 			break;
 	}
 
@@ -70,10 +73,6 @@ int read_key()
 	ch=getch();
 	switch(ch)
 	{
-		case 13:
-			return KEY_RETURN;
-		case 27:
-			return KEY_ESC;
 		case 75:
 			return KEY_LEFT;
 		case 77:
@@ -81,7 +80,7 @@ int read_key()
 		case 72:
 			return KEY_UP;
 		case 80:
-			return KEY_UP;
+			return KEY_DOWN;
 	}
 
 	return KEY_NULL;
