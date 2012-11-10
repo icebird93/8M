@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
 	int selected, ch, points=0;
 
 	// STDOUT aufstellen
+	set_size(120, 60);
 	clear_screen();
 	redraw_header();
 
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
 
 		switch(selected)
 		{
-			// Nocch nicht definiert
+			// Noch nicht definiert
 			default:
 				printf("\n # Dieses Funktion ist nicht erreichbar!\n");
 				break;

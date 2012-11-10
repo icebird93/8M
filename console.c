@@ -11,16 +11,18 @@ void clear_screen()
 	set_color(BLACK, WHITE);
 }
 
-void redraw_header()
+void redraw_header(int points)
 {
 	set_color(BLACK, YELLOW);
 
 	printf("\n");
-	printf(" ######  ###   ###  [8M: Die 8-Minuten Spiel]\n");
+	printf(" ######  ###   ###  @8M: Die 8-Minuten Spiel\n");
 	printf(" ##  ##  #### ####\n");
 	printf(" ######  ## ### ##  @Version: 1.0\n");
 	printf(" ##  ##  ##     ##  @Build date: 2012\n");
 	printf(" ######  ##     ##\n\n");
+	
+	printf(" # Punkte: %5d\n\n", points);
 
 	set_color(BLACK, WHITE);
 }
@@ -28,16 +30,37 @@ void redraw_header()
 void set_color(const int background, const int foreground)
 {    
     int color = foreground+(background * 16);
-
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
     SetConsoleTextAttribute(hConsole, color);
+}
+
+void set_size(const int width, const int height)
+{
+	HWND hWnd = GetConsoleWindow();
+	COORD size;
+	char s[13];
+
+	if(width>MAX_COLS || height>MAX_ROWS)
+		return;
+
+	sprintf(s, "mode %d,%d", width, height);
+	printf("%s", s);
+	system(s);
+
+	MoveWindow(hWnd, 10, 10, width*CHAR_WIDTH, height*CHAR_HEIGHT, 1);
+
+	size.X = width-5;
+	size.Y = height-5;
+	
+	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), size);
 }
 
 void go_to(const int x, const int y)
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
     COORD position;
+
     position.X = x;
     position.Y = y;
 
@@ -55,7 +78,7 @@ int read_key()
 {
 	int ch=getch();
 
-	// Die gedrückte Taste ist ein ASCII Charakter, Return oder Funktionstaste
+	// Die gedrückte Taste ist ein ASCII Charakter, Return oder Funktionstaste (0 oder 224)
 	switch(ch)
 	{
 		default:

@@ -4,6 +4,14 @@
 */
 
 /**
+ * Maximale Dimension des Consoles
+ */
+#define MAX_COLS 240
+#define MAX_ROWS 120
+#define CHAR_WIDTH 8
+#define CHAR_HEIGHT 12
+
+/**
  * Sammlung der Farben durch Konstanten
  */
 enum COLORS
@@ -46,5 +54,6 @@ enum KEYCODES
 void clear_screen();
 void redraw_header();
 void set_color(const int background, const int foreground);
+void set_size(const int width, const int height);
 void go_to(const int x, const int y);
 int read_key();
