@@ -1,6 +1,6 @@
 /**
- * Console Bildschirm Behandlung
- * @File: control.c
+ * Console Bildschirm/Ausgang Behandlung
+ * @source: control.c
 */
 
 /**
@@ -12,7 +12,14 @@
 #define CHAR_HEIGHT 12
 
 /**
+ * Voreingestellte Console Breite und Höhe
+ */
+#define DEFAULT_HEIGHT 60
+#define DEFAULT_WIDTH 120
+
+/**
  * Sammlung der Farben durch Konstanten
+ * für set_color
  */
 enum COLORS
 {
@@ -35,7 +42,7 @@ enum COLORS
 };
 
 /**
- * Sammlung der Farben durch Konstanten
+ * Sammlung der eigenen Funktiontasten durch Konstanten
  */
 enum KEYCODES
 {
@@ -52,7 +59,7 @@ enum KEYCODES
  * Meine Funktionen für Behandlung des STDOUT
  */
 void clear_screen();
-void redraw_header();
+void redraw_header(int points);
 void set_color(const int background, const int foreground);
 void set_size(const int width, const int height);
 void set_size_and_position(const int width, const int height, const int x, const int y);

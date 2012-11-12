@@ -1,3 +1,8 @@
+/**
+ * Console Bildschirm/Ausgang Behandlung: Quelle
+ * @header: control.h
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -5,12 +10,22 @@
 
 #include "console.h"
 
+/**
+ * @function	clear_screen
+ * Console Ausgang löschen
+ */
 void clear_screen()
 {
 	system("cls");
 	set_color(BLACK, WHITE);
 }
 
+/**
+ * @function	redraw_header
+ * @param	points	Wieviel Punkte der Spieler hat
+ *
+ * Spiel "header" ausschreiben durch ASCII Buchstaben
+ */
 void redraw_header(int points)
 {
 	set_color(BLACK, YELLOW);
@@ -22,11 +37,18 @@ void redraw_header(int points)
 	printf(" ##  ##  ##     ##  @Build date: 2012\n");
 	printf(" ######  ##     ##\n\n");
 	
-	printf(" # Punkte: %5d\n\n", points);
+	printf(" # Punkte: %6d\n\n", points);
 
 	set_color(BLACK, WHITE);
 }
 
+/**
+ * @function	set_color
+ * @param	background	Die Konstante oder int der Farbe des Hintergrundes
+ * @param	foreground	Die Konstante oder int der Farbe des Vorgrundes
+ *
+ * Modifiziert die Ausgangsfarbe
+ */
 void set_color(const int background, const int foreground)
 {    
     int color = foreground+(background * 16);
@@ -35,6 +57,15 @@ void set_color(const int background, const int foreground)
     SetConsoleTextAttribute(hConsole, color);
 }
 
+/**
+ * @function	set_size_and_position (und set_size als "Alias")
+ * @param	width	Neue Breite (in Spalten) des Consoles
+ * @param	height	Neue Höche (in Zeilen) des Consoles
+ * @param	x	Wo die Console gelegt werden soll (X Koordinate in pixel)
+ * @param	y	Wo die Console gelegt werden soll (Y Koordinate in pixel)
+ *
+ * Legt das Programm in (x,y) mit der Dimension (width,height)
+ */
 void set_size_and_position(const int width, const int height, const int x, const int y)
 {
 	HWND hWnd = GetConsoleWindow();
@@ -45,7 +76,6 @@ void set_size_and_position(const int width, const int height, const int x, const
 		return;
 
 	sprintf(s, "mode %d,%d", width, height);
-	printf("%s", s);
 	system(s);
 
 	MoveWindow(hWnd, x, y, width*CHAR_WIDTH, height*CHAR_HEIGHT, 1);
@@ -55,12 +85,18 @@ void set_size_and_position(const int width, const int height, const int x, const
 	
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), size);
 }
-
 void set_size(const int width, const int height)
 {
-	set_size_and_position(width, height, 20, 20);
+	set_size_and_position(width, height, 25, 25);
 }
 
+/**
+ * @function	go_to
+ * @param	x	Legt den Cursor in der x-ten "Spalte"
+ * @param	Y	Legt den Cursor in der y-ten "Zeile"
+ *
+ * Bewegt den Blinker in (x,y)
+ */
 void go_to(const int x, const int y)
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -73,11 +109,11 @@ void go_to(const int x, const int y)
 }
 
 /**
- * read_key
- * @Return: char
- * @Params: keine
+ * @function	read_key
+ * @result	int
  *
- * Liest eine Taste ein und wenn es ein Funktiontaste ist dann gebt zurück die virtuelle KEYCODE Konstante (wenn es existiert, sonst KEY_NULL), sonst die ASCII Code 
+ * Liest eine Taste ein und wenn es ein Funktiontaste ist dann gebt zurück die virtuelle KEYCODE Konstante (wenn es existiert, sonst KEY_NULL),
+ * sonst die ASCII Code 
  */
 int read_key()
 {
@@ -87,7 +123,7 @@ int read_key()
 	switch(ch)
 	{
 		default:
-			return ch;
+			return tolower(ch);
 		case 13:
 			return KEY_RETURN;
 		case 27:

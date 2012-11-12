@@ -1,0 +1,2 @@
+Sie bekommt "Karten". Sie hat immer die Moeglichkeit entweder um noch eine bitten oder halten. Die Summe der Werten der schon bekommene Karten soll nicht uber 21 gehen. Der Spieler, der am meisten Punkte sammelt, gewinnt.
+Die Werten der Karten werden ausgescrieben.
