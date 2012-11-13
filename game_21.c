@@ -6,8 +6,6 @@
 #include "console.h"
 #include "game_21.h"
 
-// Anzahl der Spieler
-#define N 3
 // Schwierigkeit: nur Werte zwischen 1-5
 #define DIFFICULTY 5
 // Kartenfarben
@@ -16,11 +14,15 @@
 #define CLUB 05
 #define SPADE 06
 
-// Spiel Eintritt
-void play_21(int *points)
+// Spiel Eintritt (1 Spieler, N Bots)
+void play_21(int N, int *points)
 {
 	int i, my=0, selected, player_max=0, player_max_i, points_new=0, current;
 	int *player;
+
+	// N kontrollieren
+	if(N<1 || N>5)
+		N=3;
 
 	// "Seed": random einstellen
 	srand(time(0));
@@ -44,18 +46,22 @@ void play_21(int *points)
 
 	do
 	{
+		// Neue Karte
+		printf("\n ");
 		current=get_card();
+		printf("\n");
 		if(current==11 && my>10)
 			current=1;
 		my+=current;
 
+		// Aktuelle Punkte ausschreiben
 		printf(" # Aktuelle Summe: ");
 		set_color(BLACK, YELLOW);
 		printf("%2d", my);
 		set_color(BLACK, WHITE);
 		if(my<21)
 		{
-			printf("\n # Mehr? (<j>/n): ");		
+			printf("\n # Mehr? ([j]/n): ");		
 			selected=read_key();
 			printf("\n");
 		}
@@ -72,7 +78,7 @@ void play_21(int *points)
 	}
 
 	// Punkte der Gegner
-	set_color(BLACK, PURPLE);
+	set_color(BLACK, CYAN);
 	for(i=0; i<N; i++)
 		printf("\n # Spieler %d: %2d", i+1, player[i]);
 
@@ -88,7 +94,155 @@ void play_21(int *points)
 	else
 	{
 		set_color(BLACK, RED);
-		printf("\n\n # Spieler %d hat gewonnen!", player_max_i+1);
+		if(player_max==0)
+			printf("\n\n # Huhh. Alle Spieler haben mehr als 21 Punkten...");
+		else
+			printf("\n\n # Spieler %d hat gewonnen!", player_max_i+1);
+	}
+
+	read_key();
+	clear_screen();
+}
+
+
+// Spiel Eintritt (N_MULTI Spieler)
+void play_21_multi(int N_MULTI)
+{
+	int i, *my, my_max=0, *my_max_i, my_max_count=0, selected, current, x, y, max_y=0;
+
+	// N_MULTI kontrollieren
+	if(N_MULTI<1 || N_MULTI>3)
+		N_MULTI=2;
+
+	my=(int*)calloc(N_MULTI, sizeof(int));
+	my_max_i=(int*)calloc(N_MULTI, sizeof(int));
+
+	// "Seed": random einstellen
+	srand(time(0));
+
+	// Spieler
+	for(i=0; i<N_MULTI; i++)
+	{
+		x=i*get_width()/N_MULTI+1;
+		y=1;
+		switch(i)
+		{
+			case 0:
+				set_color(DARK_GREEN, WHITE);
+				break;
+			case 1:
+				set_color(DARK_BLUE, WHITE);
+				break;
+			case 2:
+				set_color(DARK_PURPLE, WHITE);
+				break;
+			default:
+				set_color(BLACK, WHITE);
+				break;
+		}
+		go_to(x, y);
+		printf("# Spieler %d:", i+1);
+		y+=2;
+		set_color(BLACK, WHITE);
+
+		do
+		{
+			go_to(x, y);
+			current=get_card();
+			y++;
+			if(current==11 && my[i]>10)
+				current=1;
+			my[i]+=current;
+
+			go_to(x, y);
+			printf("# Aktuelle Summe: ");
+			set_color(BLACK, YELLOW);
+			printf("%2d", my[i]);
+			set_color(BLACK, WHITE);
+			y++;
+			if(my[i]<21)
+			{
+				go_to(x, y);
+				printf("# Mehr? ([j]/n): ");
+				y+=2;
+				selected=read_key();
+			}
+		} while(selected!='n' && my[i]<21);
+
+		// Letze Zeile speichern
+		if(y>max_y)
+			max_y=y;
+	}
+
+	// Punkte der Spieler
+	for(i=0; i<N_MULTI; i++)
+	{
+		x=i*get_width()/N_MULTI+1;
+		y=max_y+1;
+
+		// Spieler "Name" und seine Punkte
+		go_to(x, y);
+		switch(i)
+		{
+			case 0:
+				set_color(DARK_GREEN, WHITE);
+				break;
+			case 1:
+				set_color(DARK_BLUE, WHITE);
+				break;
+			case 2:
+				set_color(DARK_PURPLE, WHITE);
+				break;
+			default:
+				set_color(BLACK, WHITE);
+				break;
+		}
+		printf("# Spieler %d: %d", i+1, my[i]);
+		set_color(BLACK, WHITE);
+		y++;
+
+		if(my[i]>21)
+		{
+			go_to(x, y);
+			printf("# Game Over! Mehr als 21.");
+			y++;
+		}
+		else if(my[i]==21)
+		{
+			go_to(x, y);
+			set_color(BLACK, YELLOW);
+			printf("# Black Jack!");
+			set_color(BLACK, WHITE);
+			y++;
+		}
+
+		// Punkte vergleichen um das Maximum zu finden. Wenn es gleich ist, dann speichern wir den Spieler Index.
+		if(my[i]>my_max && my[i]<=21)
+		{
+			my_max=my[i];
+			my_max_i[0]=i;
+			my_max_count=1;
+		}
+		else if(my[i]==my_max)
+		{
+			my_max_i[my_max_count]=i;
+			my_max_count++;
+		}
+	}
+
+	go_to(1, max_y+5);
+	if(my_max_count>0)
+	{
+		set_color(BLACK, GREEN);
+		printf("# Spieler %d", my_max_i[0]+1);
+		for(i=1; i<my_max_count; i++)
+			printf(", %d", my_max_i[i]+1);
+		printf(" %s gewonnen!", (my_max_count>1)?"haben":"hat");
+	}
+	else
+	{
+		set_color(BLACK, RED);
+		printf("# Huhh. Alle Spieler haben mehr als 21 Punkten...");
 	}
 
 	read_key();
@@ -103,50 +257,54 @@ void play_21(int *points)
  */
 int get_card()
 {
-	// "Karte"
-	int card=1+(int)floor(13*rand()/(float)RAND_MAX);
+	int card;
 
-	printf("\n # Karte: ");
+	// "Karte"
+	srand(time(0));
+	card=rand()%13+1;
+
+	printf("# Karte: ");
 
 	// Farbe
-	set_color(BLACK, YELLOW);
-	switch(1+(int)floor(4*rand()/(RAND_MAX-1.0)))
+	set_color(BLACK, CYAN);
+	switch(1+rand()%4)
 	{
 		case 1:
-			printf("%c", HEART);
+			printf("%c ", HEART);
 			break;
 		case 2:
-			printf("%c", DIAMOND);
+			printf("%c ", DIAMOND);
 			break;
 		case 3:
-			printf("%c", CLUB);
+			printf("%c ", CLUB);
 			break;
 		case 4:
-			printf("%c", SPADE);
+			printf("%c ", SPADE);
 			break;
 	}
+	set_color(BLACK, YELLOW);
 	switch(card)
 	{
 		default:
-			printf("%d\n", card);
+			printf("%d", card);
 			set_color(BLACK, WHITE);
 			return card;
 		// A
 		case 1:
-			printf("A\n");
+			printf("A");
 			set_color(BLACK, WHITE);
 			return 11;
 		// J,Q,K
 		case 11:
-			printf("J\n");
+			printf("J");
 			set_color(BLACK, WHITE);
 			return 10;
 		case 12:
-			printf("Q\n");
+			printf("Q");
 			set_color(BLACK, WHITE);
 			return 10;
 		case 13:
-			printf("K\n");
+			printf("K");
 			set_color(BLACK, WHITE);
 			return 10;
 	}

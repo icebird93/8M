@@ -63,5 +63,7 @@ void redraw_header(int points);
 void set_color(const int background, const int foreground);
 void set_size(const int width, const int height);
 void set_size_and_position(const int width, const int height, const int x, const int y);
+int get_width();
+int get_height();
 void go_to(const int x, const int y);
 int read_key();

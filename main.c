@@ -9,7 +9,7 @@
 // Programm Eintritt
 int main(int argc, char *argv[])
 {
-	int selected, ch, points=0;
+	int selected, ch, points=0, n;
 
 	// STDOUT aufstellen
 	printf("Laden...\n");
@@ -30,20 +30,30 @@ int main(int argc, char *argv[])
 				printf("\n # Dieses Funktion ist nicht erreichbar!\n");
 				break;
 
-			// 1: 21
+			// 1,2: 21
 			case 1:
+			case 2:
 				printf("\n ");
 				set_color(RED, YELLOW);
 				printf("# Die Regel:\n\n");
 				set_color(BLACK, WHITE);
 				read_text_file("rules/21.txt");
 
+				if(selected==1)
+					printf("\n # Wieviel Bots [1-5]: ");
+				else
+					printf("\n # Wieviel Spieler [1-3]: ");
+				scanf("%d", &n);
+
 				set_color(BLACK, GREY);
 				printf("\n # Pressen Sie eine Taste um das Spiel zu beginnen: ");
 				read_key();
 
 				clear_screen();
-				play_21(&points);
+				if(selected==1)
+					play_21(n, &points);
+				else
+					play_21_multi(n);
 				redraw_header(points);
 				break;
 

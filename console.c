@@ -10,6 +10,9 @@
 
 #include "console.h"
 
+// Breite und Höche speichern
+int console_width=0, console_height=0;
+
 /**
  * @function	clear_screen
  * Console Ausgang löschen
@@ -37,7 +40,7 @@ void redraw_header(int points)
 	printf(" ##  ##  ##     ##  @Build date: 2012\n");
 	printf(" ######  ##     ##\n\n");
 	
-	printf(" # Punkte: %6d\n\n", points);
+	printf(" # Punkte: %7d\n\n", points);
 
 	set_color(BLACK, WHITE);
 }
@@ -75,6 +78,9 @@ void set_size_and_position(const int width, const int height, const int x, const
 	if(width>MAX_COLS || height>MAX_ROWS)
 		return;
 
+	console_width=width;
+	console_height=height;
+
 	sprintf(s, "mode %d,%d", width, height);
 	system(s);
 
@@ -90,6 +96,20 @@ void set_size(const int width, const int height)
 	set_size_and_position(width, height, 25, 25);
 }
 
+/**
+ * @function	get_width, get_height
+ * @result	int
+ *
+ * Gibt zurück die aktuelle Breite und Höche
+ */
+int get_width()
+{
+	return console_width;
+}
+int get_height()
+{
+	return console_height;
+}
 /**
  * @function	go_to
  * @param	x	Legt den Cursor in der x-ten "Spalte"
