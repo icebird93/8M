@@ -34,7 +34,7 @@ void redraw_header(int points)
 	set_color(BLACK, YELLOW);
 
 	printf("\n");
-	printf(" ######  ###   ###  @8M: Die 8-Minuten Spiel\n");
+	printf(" ######  ###   ###  @8M: Das 8-Minuten Spiel\n");
 	printf(" ##  ##  #### ####\n");
 	printf(" ######  ## ### ##  @Version: 1.0\n");
 	printf(" ##  ##  ##     ##  @Build date: 2012\n");
@@ -61,7 +61,7 @@ void set_color(const int background, const int foreground)
 }
 
 /**
- * @function	set_size_and_position (und set_size als "Alias")
+ * @function	set_size_and_position (und set_size, set_position als "Alias")
  * @param	width	Neue Breite (in Spalten) des Consoles
  * @param	height	Neue Höche (in Zeilen) des Consoles
  * @param	x	Wo die Console gelegt werden soll (X Koordinate in pixel)
@@ -78,22 +78,26 @@ void set_size_and_position(const int width, const int height, const int x, const
 	if(width>MAX_COLS || height>MAX_ROWS)
 		return;
 
-	console_width=width;
-	console_height=height;
+	console_width=width-CURSOR_POS_FIX;
+	console_height=height-CURSOR_POS_FIX;
 
 	sprintf(s, "mode %d,%d", width, height);
 	system(s);
 
 	MoveWindow(hWnd, x, y, width*CHAR_WIDTH, height*CHAR_HEIGHT, 1);
 
-	size.X = width-5;
-	size.Y = height-5;
+	size.X = width-CURSOR_POS_FIX+1;
+	size.Y = height-CURSOR_POS_FIX+1;
 	
 	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), size);
 }
 void set_size(const int width, const int height)
 {
 	set_size_and_position(width, height, 25, 25);
+}
+void set_position(const int x, const int y)
+{
+	set_size_and_position(console_width, console_height, x, y);
 }
 
 /**
@@ -148,6 +152,8 @@ int read_key()
 			return KEY_RETURN;
 		case 27:
 			return KEY_ESC;
+		case 32:
+			return KEY_SPACE;
 		case 0:
 		case 224:
 			break;
@@ -165,6 +171,10 @@ int read_key()
 			return KEY_UP;
 		case 80:
 			return KEY_DOWN;
+		default:
+			if(DEBUG_MODE)
+				printf("[F: %d]", ch);
+			return KEY_UNKNOWN;
 	}
 
 	return KEY_NULL;

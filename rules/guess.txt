@@ -1,0 +1,2 @@
+Sie sollen die von Computer zufaellig gewaelte Zahl herausfinden. In einer Runde koennen Sie einmal eine Zahl erahnen und das Software wird sagen ob es die richtige Zahl ist. Wenn nicht, dann sagt auch ob die heimliche Zahl groesser oder kleiner ist. Das geht bis Sie die Zahl nicht getroffen hat.
+Alles Gute!

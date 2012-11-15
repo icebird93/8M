@@ -30,6 +30,7 @@ int menu()
 	printf("\n [1] 21");
 	printf("\n [2] 21 (Mehr Spieler Multi)");
 	printf("\n [3] Catch Me");
+	printf("\n [4] Guess");
 
 	set_color(BLACK, GREEN);
 	printf("\n\n [H] Hall of Fame");
@@ -72,6 +73,11 @@ int read_text_file(char *filename)
 		while(!feof(f))
 			printf("%c", fgetc(f));
 		fclose(f);
+	}
+	else
+	{
+		printf("[%s] File Read Error\n", filename);
+		return -1;
 	}
 	printf("\n");
 	
