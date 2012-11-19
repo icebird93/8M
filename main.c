@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
 	int selected, points=0;
 
 	// STDOUT aufstellen
+	init_player();
 	init(points);
 
 	// Mainmenu zeigen und Spiel starten

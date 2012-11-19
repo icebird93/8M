@@ -5,6 +5,7 @@
 
 #include "console.h"
 #include "game_guess.h"
+#include "highscore.h"
 
 // Spiel Eintritt
 void play_guess(int difficulty, int *points)
@@ -54,15 +55,8 @@ void play_guess(int difficulty, int *points)
 	} while(guess!=secret);
 
 	set_color(BLACK, GREEN);
-	printf("\n # %.0lf ist die gedachte Zahl! Sie haben gewonnen in %d Schritte.\n", guess, steps);
+	printf("\n # %.0lf ist die gedachte Zahl! Sie haben gewonnen in %d Schritten.\n", guess, steps);
 	*points+=difficulty*1000;
 
-	set_color(BLACK, GREY);
-	printf("\n # Druecken Sie Esc um zurueck zum Menu zu springen...");
-
-	do{
-		ch=read_key();
-	} while(ch!=KEY_ESC);
-
-	clear_screen();
+	highscore(HS_GUESS, steps, difficulty);
 }

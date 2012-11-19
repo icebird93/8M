@@ -1,8 +1,9 @@
 #include <stdio.h>
 
+#include "game_launcher.h"
 #include "console.h"
 #include "control.h"
-#include "game_launcher.h"
+#include "highscore.h"
 
 #include "game_21.h"
 #include "game_catch.h"
@@ -12,6 +13,7 @@
 void game_launch(int *selected, int *points)
 {
 	int ch, n;
+	item *p;
 
 	switch(*selected)
 	{
@@ -67,6 +69,47 @@ void game_launch(int *selected, int *points)
 			game_finish(*points);
 			break;
 
+		// H: Hall of Fame
+		case 'h':
+			printf("\n\n # Spiele:\n");
+			printf("\n [1] 21");
+			printf("\n [2] Catch");
+			printf("\n [3] Guess");
+			printf("\n\n # Extras:\n");
+			printf("\n [4] 21 loeschen");
+			printf("\n [5] Catch loeschen");
+			printf("\n [6] Guess loeschen");
+			printf("\n\n # Funktion: ");
+
+			do
+			{
+				n=read_key();
+			} while(n<'1' || n>'6');
+			
+			switch(n)
+			{
+				case '1':
+					display_highscore(HS_21, 0);
+					break;
+				case '2':
+					display_highscore(HS_CATCH, 0);
+					break;
+				case '3':
+					display_highscore(HS_GUESS, 0);
+					break;
+				case '4':
+					clear_highscore(HS_21);
+					break;
+				case '5':
+					clear_highscore(HS_CATCH);
+					break;
+				case '6':
+					clear_highscore(HS_GUESS);
+					break;
+			}
+			printf("\n\n");
+			break;
+
 		// Q: Beenden mit Bestätigung (durch j/return/esc/space Taste)
 		case KEY_ESC:
 			*selected='q';
@@ -104,5 +147,15 @@ void game_prepare2()
 // Spiel beenden
 void game_finish(int points)
 {
+	int ch;
+
+	set_color(BLACK, GREY);
+	printf("\n\n # Druecken Sie Esc um zurueck zum Menu zu springen...");
+
+	do{
+		ch=read_key();
+	} while(ch!=KEY_ESC);
+
+	clear_screen();
 	redraw_header(points);
 }

@@ -5,6 +5,7 @@
 
 #include "console.h"
 #include "game_catch.h"
+#include "highscore.h"
 
 // Eine Struktur damit der Koordinaten der Gegner gespeichert werden
 struct COORDINATES
@@ -152,14 +153,8 @@ void play_catch(int N, int *points)
 	set_color(BLACK, WHITE);
 	printf("\n # Sie haben sich %d-mal bewegt", steps);
 	printf("\n # Punkten: %d\n", points_new);
-	set_color(BLACK, GREY);
-	printf("\n # Pressen Sie Space/Return...");
 
-	do{
-		pressed=read_key();
-	} while(pressed!=KEY_SPACE && pressed!=KEY_RETURN);
-
-	clear_screen();
+	highscore(HS_CATCH, steps, N);
 }
 
 // Bewegt Spieler in die gegebene Position (wenn es richtig ist)

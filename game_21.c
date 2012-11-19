@@ -5,6 +5,7 @@
 
 #include "console.h"
 #include "game_21.h"
+#include "highscore.h"
 
 // Schwierigkeit: nur Werte zwischen 1-5
 #define DIFFICULTY 5
@@ -90,6 +91,8 @@ void play_21(int N, int *points)
 		set_color(BLACK, GREEN);
 		printf("\n\n # Sie haben gewonnen! (%d Punkten)", points_new);
 		*points+=points_new;
+	
+		highscore(HS_21, points_new, N);
 	}
 	else
 	{
@@ -99,9 +102,6 @@ void play_21(int N, int *points)
 		else
 			printf("\n\n # Spieler %d hat gewonnen!", player_max_i+1);
 	}
-
-	read_key();
-	clear_screen();
 }
 
 
@@ -244,9 +244,6 @@ void play_21_multi(int N_MULTI)
 		set_color(BLACK, RED);
 		printf("# Huhh. Alle Spieler haben mehr als 21 Punkten...");
 	}
-
-	read_key();
-	clear_screen();
 }
 
 /**

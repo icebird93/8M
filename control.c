@@ -54,6 +54,18 @@ int menu()
 }
 
 /**
+ * @function	init_player
+ *
+ * Liest ein die Datei der Spieler
+ */
+void init_player()
+{
+	player_name=(char*)malloc(30*sizeof(char));
+	printf("Willkommen in 8M! Waehlen Sie einen Name (fur die Bestenlisten): ");
+	scanf("%s", player_name);
+}
+
+/**
  * @function	read_text_file
  * @result	int
  *
@@ -77,7 +89,8 @@ int read_text_file(char *filename)
 	}
 	else
 	{
-		printf("[%s] File Read Error\n", filename);
+		if(DEBUG_MODE)
+			printf("[%s] File Read Error\n", filename);
 		return -1;
 	}
 	printf("\n");
