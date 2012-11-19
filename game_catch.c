@@ -6,16 +6,20 @@
 #include "console.h"
 #include "game_catch.h"
 
+// Eine Struktur damit der Koordinaten der Gegner gespeichert werden
 struct COORDINATES
 {
 	int x, y;
 };
 
 // Spiel Eintritt
-void play_catch(int *points)
+void play_catch(int N, int *points)
 {
 	int i, x=0, y=0, new_x, new_y, key, caught=0, steps=0, points_new=0, pressed;
 	struct COORDINATES *opp;
+
+	if(N<0 || N>2000)
+		N=100;
 
 	set_color(BLACK, GREY);
 	// Oben und unten
@@ -72,34 +76,43 @@ void play_catch(int *points)
 			case KEY_RIGHT:
 				move_player(&x, &y, 1, 0);
 				break;
+			case KEY_ESC:
+				caught=1;
+				break;
 		}
 
-		for(i=0; i<N; i++)
+		if(!caught)
 		{
-			if(opp[i].x==x)
+			for(i=0; i<N; i++)
 			{
-				// Kollision und Bewegung
-				if(fabs(opp[i].y-y)<=1)
-					caught=1;
-				move_opponent(&opp[i].x, &opp[i].y, 0, (opp[i].y>y)?-1:1);
-			}
-			else if(opp[i].y==y)
-			{
-				// Kollision und Bewegung
-				if(fabs(opp[i].x-x)<=1)
-					caught=1;
-				move_opponent(&opp[i].x, &opp[i].y, (opp[i].x>x)?-1:1, 0);
-			}
-			else
-			{
-				// Bewegung
-				if(rand()%2==0)
+				if(opp[i].x==x)
+				{
+					// Kollision und Bewegung
+					if(fabs(opp[i].y-y)<=1)
+						caught=1;
 					move_opponent(&opp[i].x, &opp[i].y, 0, (opp[i].y>y)?-1:1);
-				else
+				}
+				else if(opp[i].y==y)
+				{
+					// Kollision und Bewegung
+					if(fabs(opp[i].x-x)<=1)
+						caught=1;
 					move_opponent(&opp[i].x, &opp[i].y, (opp[i].x>x)?-1:1, 0);
-				// Kollision
-				if(opp[i].x==x && opp[i].y==y)
-					caught=1;
+				}
+				else
+				{
+					// Bewegung
+					if(rand()%2==0)
+						move_opponent(&opp[i].x, &opp[i].y, 0, (opp[i].y>y)?-1:1);
+					else
+						move_opponent(&opp[i].x, &opp[i].y, (opp[i].x>x)?-1:1, 0);
+					// Kollision
+					if(opp[i].x==x && opp[i].y==y)
+					{
+						caught=1;
+						break;
+					}
+				}
 			}
 		}
 
@@ -107,7 +120,7 @@ void play_catch(int *points)
 	} while(!caught && key!=KEY_ESC);
 
 	// Game Over
-	set_color(RED, YELLOW);
+	set_color(YELLOW, RED);
 	x=(get_width()-14)/2;
 	y=(get_height()-5)/2;
 	go_to(x, y);

@@ -1,5 +1,6 @@
 /**
  * control.c
+ * @header	control.h
  *
  * Das Library dass für die Behandlung des Spiels sorgt. (Zum Beispiel Menus)
  */

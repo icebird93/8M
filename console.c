@@ -1,6 +1,8 @@
 /**
+ * console.c
+ * @header	control.h
+ *
  * Console Bildschirm/Ausgang Behandlung: Quelle
- * @header: control.h
 */
 
 #include <stdio.h>
@@ -43,6 +45,21 @@ void redraw_header(int points)
 	printf(" # Punkte: %7d\n\n", points);
 
 	set_color(BLACK, WHITE);
+}
+
+/**
+ * @function	init
+ * @param	points	Wieviel Punkte der Spieler hat
+ *
+ * Initializiert das Console
+ */
+void init(int points)
+{
+	printf("Laden...\n");
+	system("chcp 850");
+	set_size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	clear_screen();
+	redraw_header(points);
 }
 
 /**

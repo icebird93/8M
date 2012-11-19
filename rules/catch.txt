@@ -1,0 +1,3 @@
+Sie bewegt in der Mitte gelegte Spieler und ihr Ziel ist so viele Schritte machen, wie moeglich. In einer Schritt koennen sie in eine Richtung, aber die Gegner bewegen sich auch! Vermeiden sie um Punkte zu sammeln. Wenn sie Sie angreifen wird das Spiel beendet.
+
+Sie koennen irgendwann mit dem Escape das Spiel beenden.
