@@ -63,6 +63,8 @@ void init_player()
 	player_name=(char*)malloc(30*sizeof(char));
 	printf("Willkommen in 8M! Waehlen Sie einen Name (fur die Bestenlisten): ");
 	scanf("%s", player_name);
+	if(player_name[29]!='\0')
+		player_name[29]='\0';
 }
 
 /**

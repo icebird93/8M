@@ -52,7 +52,7 @@ void display_highscore(char *filename, int difficulty)
 		if(difficulty==0 || p->difficulty==difficulty)
 		{
 			rank++;
-			printf("\n\n %d. %s\t%5d\t[%d]", rank, p->name, p->points, p->difficulty);
+			printf("\n\n %d. %-32s\t%5d\t[%d]", rank, p->name, p->points, p->difficulty);
 		}	
 	set_color(BLACK, WHITE);
 }
