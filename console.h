@@ -77,7 +77,7 @@ enum KEYCODES
  */
 void clear_screen();
 void redraw_header(int points);
-void init(int points);
+void init(int points, int width, int height);
 void set_color(const int background, const int foreground);
 void set_size_and_position(const int width, const int height, const int x, const int y);
 void set_size(const int width, const int height);

@@ -38,7 +38,7 @@ void redraw_header(int points)
 	printf("\n");
 	printf(" ######  ###   ###  @8M: Das 8-Minuten Spiel\n");
 	printf(" ##  ##  #### ####\n");
-	printf(" ######  ## ### ##  @Version: 1.0\n");
+	printf(" ######  ## ### ##  @Version: 1.1\n");
 	printf(" ##  ##  ##     ##  @Build date: 2012\n");
 	printf(" ######  ##     ##\n\n");
 	
@@ -53,11 +53,11 @@ void redraw_header(int points)
  *
  * Initializiert das Console
  */
-void init(int points)
+void init(int points, int width, int height)
 {
 	printf("Laden...\n");
 	system("chcp 850");
-	set_size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	set_size(width, height);
 	clear_screen();
 	redraw_header(points);
 }
@@ -92,7 +92,7 @@ void set_size_and_position(const int width, const int height, const int x, const
 	COORD size;
 	char s[13];
 
-	if(width>MAX_COLS || height>MAX_ROWS)
+	if(width>MAX_COLS || width<50 || height>MAX_ROWS || height<20)
 		return;
 
 	console_width=width-CURSOR_POS_FIX;
