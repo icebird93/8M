@@ -11,7 +11,7 @@
  *
  * Liest ein, aktualisiert, schreibt aus (wenn nötig) und zeignet die Bestenliste auf dem Bildschirm an
  */
-void highscore(char *filename, int score, int difficulty)
+void highscore(char *filename, unsigned int score, int difficulty)
 {
 	item *hs;
 	hs=read_highscore(filename);
@@ -105,9 +105,12 @@ item* read_highscore(char *filename)
 	FILE *f;
 	item *head=NULL, *p;
 	
-	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+1)*sizeof(char));
+	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+2)*sizeof(char));
 	sprintf(path, "%s/%s", get_cwd(), filename);
 	
+	if(DEBUG_MODE)
+		printf("[Read][%s]\n", path);
+
 	f=fopen(path, "rb");
 	if(f)
 	{
@@ -142,10 +145,16 @@ void write_highscore(char *filename, item *head)
 	char *path;
 	FILE *f;
 	item *p;
+
+	if(head==NULL)
+		return;
 	
-	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+1)*sizeof(char));
+	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+2)*sizeof(char));
 	sprintf(path, "%s/%s", get_cwd(), filename);
-	
+
+	if(DEBUG_MODE)
+		printf("[Write][%s]\n", path);
+
 	f=fopen(path, "wb");
 	if(f)
 	{
@@ -159,6 +168,7 @@ void write_highscore(char *filename, item *head)
 	{
 		if(DEBUG_MODE)
 			printf("[%s] File Write Error\n", filename);
+		return;
 	}
 }
 
@@ -170,7 +180,7 @@ void write_highscore(char *filename, item *head)
 int clear_highscore(char *filename)
 {
 	char *path;
-	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+1)*sizeof(char));
+	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+2)*sizeof(char));
 	sprintf(path, "%s/%s", get_cwd(), filename);
 	return remove(path);
 }
@@ -185,7 +195,7 @@ item* create_item()
 {
 	item *i;
 	i=(item*)malloc(sizeof(item));
-	if(!i)
+	if(i==NULL)
 	{
 		fputs("highscore.c (create_item): malloc() failure", stderr);
 		if(DEBUG_MODE)
@@ -224,8 +234,8 @@ void add_item(item **head, item *i)
 item* update_item(item *i, char *name, unsigned int points, int difficulty)
 {
 	// Eingang kontrollieren
-	if(strlen(name)>32)
-		name[32]='\0';
+	if(strlen(name)>30)
+		name[31]='\0';
 
 	strcpy(i->name, name);
 	i->difficulty=difficulty;

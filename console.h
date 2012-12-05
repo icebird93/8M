@@ -4,6 +4,10 @@
  *
  * Console Bildschirm/Ausgang Behandlung
 */
+
+#ifndef CONSOLE_H
+#define CONSOLE_H
+
 #include <conio.h>
 
 /**
@@ -82,3 +86,5 @@ int get_width();
 int get_height();
 void go_to(const int x, const int y);
 int read_key();
+
+#endif

@@ -7,14 +7,6 @@
 #include "game_21.h"
 #include "highscore.h"
 
-// Schwierigkeit: nur Werte zwischen 1-5
-#define DIFFICULTY 5
-// Kartenfarben
-#define HEART 03
-#define DIAMOND 04
-#define CLUB 05
-#define SPADE 06
-
 // Spiel Eintritt (1 Spieler, N Bots)
 void play_21(int N, int *points)
 {
@@ -27,6 +19,7 @@ void play_21(int N, int *points)
 
 	// "Seed": random einstellen
 	srand(time(0));
+	rand();
 
 	player=(int*)malloc(N*sizeof(int));
 
@@ -108,45 +101,56 @@ void play_21(int N, int *points)
 // Spiel Eintritt (N_MULTI Spieler)
 void play_21_multi(int N_MULTI)
 {
-	int i, *my, my_max=0, *my_max_i, my_max_count=0, selected, current, x, y, max_y=0;
+	int i, *my, my_max=0, *my_stop, my_stopped=0, *my_max_i, my_max_count=0, selected, current, x, y, y_player, max_y=0;
 
 	// N_MULTI kontrollieren
-	if(N_MULTI<1 || N_MULTI>3)
+	if(N_MULTI<1 || N_MULTI>4)
 		N_MULTI=2;
 
+	// RAM allokieren mit 0
 	my=(int*)calloc(N_MULTI, sizeof(int));
 	my_max_i=(int*)calloc(N_MULTI, sizeof(int));
+	my_stop=(int*)calloc(N_MULTI, sizeof(int));
 
 	// "Seed": random einstellen
 	srand(time(0));
+	rand();
 
 	// Spieler
-	for(i=0; i<N_MULTI; i++)
+	max_y=1;
+	do
 	{
-		x=i*get_width()/N_MULTI+1;
-		y=1;
-		switch(i)
+		y_player=max_y;
+		for(i=0; i<N_MULTI; i++)
 		{
-			case 0:
-				set_color(DARK_GREEN, WHITE);
-				break;
-			case 1:
-				set_color(DARK_BLUE, WHITE);
-				break;
-			case 2:
-				set_color(DARK_PURPLE, WHITE);
-				break;
-			default:
-				set_color(BLACK, WHITE);
-				break;
-		}
-		go_to(x, y);
-		printf("# Spieler %d:", i+1);
-		y+=2;
-		set_color(BLACK, WHITE);
+			if(my_stop[i])
+				continue;
 
-		do
-		{
+			x=i*get_width()/N_MULTI+1;
+			y=y_player;
+			switch(i)
+			{
+				case 0:
+					set_color(DARK_GREEN, WHITE);
+					break;
+				case 1:
+					set_color(DARK_BLUE, WHITE);
+					break;
+				case 2:
+					set_color(DARK_PURPLE, WHITE);
+					break;
+				case 3:
+					set_color(DARK_RED, WHITE);
+					break;
+				default:
+					set_color(BLACK, WHITE);
+					break;
+			}
+			go_to(x, y);
+			printf("# Spieler %d:", i+1);
+			y+=2;
+			set_color(BLACK, WHITE);
+	
 			go_to(x, y);
 			current=get_card();
 			y++;
@@ -167,18 +171,23 @@ void play_21_multi(int N_MULTI)
 				y+=2;
 				selected=read_key();
 			}
-		} while(selected!='n' && my[i]<21);
-
-		// Letze Zeile speichern
-		if(y>max_y)
-			max_y=y;
-	}
+			if(my[i]>=21 || selected=='n')
+			{
+				my_stop[i]=1;
+				my_stopped++;
+			}
+	
+			// Letze Zeile speichern
+			if(y>max_y)
+				max_y=y;
+		}
+	} while(my_stopped<N_MULTI);
 
 	// Punkte der Spieler
 	for(i=0; i<N_MULTI; i++)
 	{
 		x=i*get_width()/N_MULTI+1;
-		y=max_y+1;
+		y=max_y+3;
 
 		// Spieler "Name" und seine Punkte
 		go_to(x, y);
@@ -192,6 +201,9 @@ void play_21_multi(int N_MULTI)
 				break;
 			case 2:
 				set_color(DARK_PURPLE, WHITE);
+				break;
+			case 3:
+				set_color(DARK_RED, WHITE);
 				break;
 			default:
 				set_color(BLACK, WHITE);
@@ -230,7 +242,7 @@ void play_21_multi(int N_MULTI)
 		}
 	}
 
-	go_to(1, max_y+5);
+	go_to(1, max_y+8);
 	if(my_max_count>0)
 	{
 		set_color(BLACK, GREEN);
@@ -255,9 +267,18 @@ void play_21_multi(int N_MULTI)
 int get_card()
 {
 	int card;
+	unsigned long int time_current;
+	static unsigned long int time_prev;
+
+	// "Seed": random einst ellen
+	time_current=time(0);
+	while(time_prev && time_prev>=time_current)
+		time_current+=10;
+	srand(time_current);
+	time_prev=time_current;
 
 	// "Karte"
-	srand(time(0));
+	rand();
 	card=rand()%13+1;
 
 	printf("# Karte: ");

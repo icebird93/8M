@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+#ifndef HIGHSCORE_H
+#define HIGHSCORE_H
+
 /* Spiel Bestenlisten */
 #define HS_21 "highscore/21.dat"
 #define HS_CATCH "highscore/catch.dat"
@@ -13,7 +16,7 @@
  */
 typedef struct struct_highscore_item
 {
-	char name[32];
+	char name[31];
 	unsigned int points;
 	int difficulty;
 	struct struct_highscore_item *next;
@@ -33,3 +36,5 @@ void add_item(item **head, item *i);
 item* update_item(item *i, char *name, unsigned int points, int difficulty);
 void remove_item(item **head, item **i);
 int count_items(item *head);
+
+#endif

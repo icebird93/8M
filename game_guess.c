@@ -12,10 +12,22 @@ void play_guess(int difficulty, int *points)
 {
 	double secret, guess;
 	int ch, i, steps=0, max=1000+(int)floor(pow(SECRET_BASE, difficulty));
+	char s[16];
+
+	/* Vorbereitungen */
+	getchar();
+	s[15]='\0';
 
 	/* difficulty kontrollieren */
 	if(difficulty<1 || difficulty>10)
 		difficulty=5;
+
+	/* Hinweis */
+	set_color(BLACK, YELLOW);
+	go_to(get_width()-53, 1);
+	printf(" Schreiben Sie jederzeit Q um das Spiel zu beenden! #");
+	go_to(0, 0);
+	set_color(BLACK, WHITE);
 
 	/* Rand einstellen */
 	srand(time(0));
@@ -32,26 +44,32 @@ void play_guess(int difficulty, int *points)
 			i++;
 			if(i>1)
 			{
-				/* getchar is gebraucht wegen Input Buffer */
-				getchar();
-				printf(" # Nicht gueltig! Neuer Tipp: ");
+				/* getchar is gebraucht wegen Input Buffer und der Ende */
+				printf("\n # Nicht gueltig! Neuer Tipp: ");
 			}
-			scanf("%lf", &guess);
+			fgets(s, 15, stdin);
+			if(s[0]=='q' || s[0]=='Q')
+				return;
+			guess=(int)atoi(s);
 		} while(guess<0);
 		steps++;
 		
 		if(guess>secret)
 		{
-			set_color(BLACK, CYAN);
-			printf("\n # %.0lf ist groesser als die gedachte Zahl\n", guess);
+			printf("\n ");
+			set_color(DARK_BLUE, WHITE);
+			printf("# %.0lf ist ZU GROESS", guess);
+			set_color(BLACK, WHITE);
+			printf("\n");
 		}
 		else if(guess<secret)
 		{
-			set_color(BLACK, RED);
-			printf("\n # %.0lf ist kleiner als die gedachte Zahl\n", guess);
+			printf("\n ");
+			set_color(RED, WHITE);
+			printf("# %.0lf ist ZU KLEIN", guess);
+			set_color(BLACK, WHITE);
+			printf("\n");
 		}
-
-		set_color(BLACK, WHITE);
 	} while(guess!=secret);
 
 	set_color(BLACK, GREEN);

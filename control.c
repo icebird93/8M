@@ -15,9 +15,6 @@
 #include "console.h"
 #include "control.h"
 
-// Aktueller Verzeichnis
-char *cwd;
-
 /**
  * @function	menu
  * @result	int
@@ -61,7 +58,7 @@ int menu()
 void init_player()
 {
 	player_name=(char*)malloc(30*sizeof(char));
-	printf("Willkommen in 8M! Waehlen Sie einen Name (fur die Bestenlisten): ");
+	printf("Willkommen in 8M!\nWaehlen Sie einen Name (fur die Bestenlisten): ");
 	scanf("%s", player_name);
 	if(player_name[29]!='\0')
 		player_name[29]='\0';
@@ -78,8 +75,11 @@ int read_text_file(char *filename)
 	FILE *f;
 	char *path;
 
-	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+1)*sizeof(char));
+	path=(char*)malloc((strlen(get_cwd())+strlen(filename)+2)*sizeof(char));
 	sprintf(path, "%s/%s", get_cwd(), filename);
+
+	if(DEBUG_MODE)
+		printf("[%s]\n", path);
 
 	f=fopen(path, "r");
 	if(f)
@@ -93,7 +93,7 @@ int read_text_file(char *filename)
 	{
 		if(DEBUG_MODE)
 			printf("[%s] File Read Error\n", filename);
-		return -1;
+		return 0;
 	}
 	printf("\n");
 	
@@ -108,7 +108,8 @@ int read_text_file(char *filename)
  */
 char* get_cwd()
 {
-	if(!cwd)
+	static char *cwd;
+	if(cwd==NULL)
 		cwd=getcwd(NULL, 0);
 	return cwd;
 }

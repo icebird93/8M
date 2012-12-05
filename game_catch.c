@@ -19,7 +19,7 @@ void play_catch(int N, int *points)
 	int i, x=0, y=0, new_x, new_y, key, caught=0, steps=0, points_new=0, pressed;
 	struct COORDINATES *opp;
 
-	if(N<0 || N>2000)
+	if(N<25 || N>2000)
 		N=100;
 
 	set_color(BLACK, GREY);
@@ -154,7 +154,7 @@ void play_catch(int N, int *points)
 	printf("\n # Sie haben sich %d-mal bewegt", steps);
 	printf("\n # Punkten: %d\n", points_new);
 
-	highscore(HS_CATCH, steps, N);
+	highscore(HS_CATCH, steps, (N/50)+1);
 }
 
 // Bewegt Spieler in die gegebene Position (wenn es richtig ist)

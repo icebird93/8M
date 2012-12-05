@@ -31,7 +31,7 @@ void game_launch(int *selected, int *points)
 			if(*selected==1)
 				printf("\n # Wieviel Bots [1-5]: ");
 			else
-				printf("\n # Wieviel Spieler [1-3]: ");
+				printf("\n # Wieviel Spieler [1-4]: ");
 			scanf("%d", &n);
 
 			game_prepare2();
@@ -49,7 +49,7 @@ void game_launch(int *selected, int *points)
 		case 3:
 			game_prepare1("rules/catch.txt");
 
-			printf("\n # Wieviel Bots [1-300]: ");
+			printf("\n # Wieviel Bots [25-300]: ");
 			scanf("%d", &n);
 
 			game_prepare2();
@@ -130,8 +130,9 @@ void game_prepare1(char *rulefile)
 {
 	printf("\n ");
 	set_color(RED, YELLOW);
-	printf("# Die Regel:\n\n");
+	printf("# Die Regel:");
 	set_color(BLACK, WHITE);
+	printf("\n\n");
 	read_text_file(rulefile);
 }
 
@@ -139,8 +140,8 @@ void game_prepare1(char *rulefile)
 void game_prepare2()
 {
 	set_color(BLACK, GREY);
-	printf("\n # Pressen Sie eine Taste um das Spiel zu beginnen: ");
-	read_key();
+	printf("\n # Pressen Sie SPACE um das Spiel zu beginnen: ");
+	do{ } while(read_key()!=KEY_SPACE);
 	clear_screen();
 }
 
@@ -150,7 +151,7 @@ void game_finish(int points)
 	int ch;
 
 	set_color(BLACK, GREY);
-	printf("\n\n # Druecken Sie Esc um zurueck zum Menu zu springen...");
+	printf("\n\n # Druecken Sie ESC um zurueck zum Menu zu springen...");
 
 	do{
 		ch=read_key();
